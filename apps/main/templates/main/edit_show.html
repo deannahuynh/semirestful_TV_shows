@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'main/css/bootstrap.min.css' %}">
+    <style>
+    /* * {
+        outline: 1px dotted red;
+    } */
+    #wrapper {
+        width: 600px;
+        margin: 20px auto;
+    }
+
+    button, h1{
+        margin: 20px 0;
+    }
+    </style>
+</head>
+<body>
+    <div id="wrapper">
+        <a href="/shows" class="topLink">Go Back</a>
+        <form id="form" action="/update/{{show.id}}" method="POST">
+        {% csrf_token %}
+            <h1>Edit Show {{ show.id }}</h1>
+            <div class="form-row">
+                <div class="form-group col-sm-12">
+                    <label for="inputEmail4">Title</label>
+                    <input type="text" name="title" class="form-control" id="inputEmail4" value="{{show.title}}">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="inputEmail4">Network</label>
+                    <input type="text" name="network" class="form-control" id="inputEmail4" value="{{ show.network.name }}">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="date">Release Date</label>
+                    <input type="date" name="releaseDate" class="form-control" id="date" value="{{releaseDate}}">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label for="inputEmail4">Description</label>
+                    <textarea type="text" name="description" class="form-control" id="inputEmail4">{{show.description}}</textarea>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Update Show</button>
+        </form>
+
+        <a href="/shows/{{show.id}}"> Go to Show</a>
+    </div>
+</body>
+</html>

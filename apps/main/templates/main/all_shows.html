@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'main/css/bootstrap.min.css' %}">
+    <style>
+    #wrapper {
+        margin: 50px;
+    }
+
+    table {
+        border: 2px solid black;
+    }
+    </style>
+</head>
+<body>
+    <div id="wrapper">
+        <h1>All Shows</h1>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Network</th>
+                    <th scope="col">Release Date</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for show in shows %}
+                <tr>
+                    <th scope="row">{{ show.id }}</th>
+                    <td>{{ show.title }}</td>
+                    <td>{{ show.network.name }}</td>
+                    <td>{{ show.release_date }}</td>
+                    <td>
+                        <a href="/shows/{{ show.id }}">Show</a> |
+                        <a href="/edit/{{ show.id }}">Edit</a> |
+                        <a href="/delete/{{ show.id }}">Delete</a> 
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <a href="/shows/new">Add a New Show</a>
+    </div>
+</body>
+</html>
