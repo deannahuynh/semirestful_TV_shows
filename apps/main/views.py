@@ -1,36 +1,44 @@
 from django.shortcuts import render, HttpResponse, redirect
 from .models import Network, Show
 from datetime import datetime
+from django.contrib import messages
 
 
 def add_show(request):
     return render(request, 'main/add_show.html')
 
 def create_show(request):
-    if request.method == 'POST':
-        print("checking...")
-        post = request.POST
-        title = post['title']
-        print(title)
-        new_network = Network.objects.create(name=request.POST['network'])
-        network = new_network
-        print(network)
-        release_date = post['releaseDate']
-        print(release_date)
-        description = post['description']
-        print(description)
-        new_show = Show.objects.create(title=title, network=network, release_date=release_date, description=description)
-        print("\n\n\n", new_show)
-        return redirect('/shows')
-
+    # pass the post data to the method we wrote and save the response in a variable called errors
+    errors = Show.objects.basic_validator(request.POST)
+    # check if the errors in the dictionary has anything in it
+    if len(errors) > 0:
+        # if the errors in the dictionary contains anything, loop through each key-value pair and make a flash message
+        for key, value in errors.items():
+            messages.error(request, value)
+        # redirect the user back to the form to fix the errors
+        return redirect('/shows/new')
+    else:
+        if request.method == 'POST':
+            print("checking...")
+            post = request.POST
+            title = post['title']
+            print(title)
+            new_network = Network.objects.create(name=request.POST['network'])
+            network = new_network
+            print(network)
+            release_date = post['releaseDate']
+            print(release_date)
+            description = post['description']
+            print(description)
+            new_show = Show.objects.create(title=title, network=network, release_date=release_date, description=description)
+            print("\n\n\n", new_show)
+            return redirect('/shows')
 
 def all_shows(request):
     context = {
         "shows": Show.objects.all()
     }
     return render(request, 'main/all_shows.html', context)
-
-
 
 def edit(request, showId):
     show = Show.objects.get(id=showId)
@@ -41,8 +49,6 @@ def edit(request, showId):
     }
     print(context)
     return render(request, 'main/edit_show.html', context)
-
-
 
 def update(request, showId):
     if request.method == "POST":
